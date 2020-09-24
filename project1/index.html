@@ -20,48 +20,66 @@
     <h1>Game of Life</h1>
     <canvas></canvas>
     <div class="inputs">
+        <h1 id="controls">Controls</h1>
+
+        <section class="patterns">
+            <select name="patternSelect">
+                <option value="gliderGun">Gosper Glider Gun</option>
+                <option value="beacon1">Beacon on 38P11.1</option>
+                <option value="beacon2">Beacon on cover</option>
+                <option value="ak94">AK-94</option>
+                <option value="b52">B-52 bomber</option>
+                <option value="dieHard">Die hard</option>
+                <option value="random" selected>Random Setup</option>
+            </select>
+        </section>
+
         <section class="buttons">
             <button id="playButton">Play</button> <button id="pauseButton">Pause</button> <button id="stepButton">Step</button>
             <button id="resetButton">Reset</button>
         </section>
 
+        <section class="textInputs">
+            <label for="percentAlive">Percent Alive:</label>
+            <input type="text" name="percentAlive" id="percentAlive">
+        </section>
+
         <section class="sizes">
             <h3>Cell Size</h3>
-            <input type="radio" id="smallest" name="cellSize" value="tiny"> <label for="smallest">Tiny</label>
-            <input type="radio" id="small" name="cellSize" value="small"> <label for="small">Small</label>
-            <input type="radio" id="regular" name="cellSize" value="default" checked> <label for="regular">Medium</label>
-            <input type="radio" id="big" name="cellSize" value="big"> <label for="big">Large</label>
-            <input type="radio" id="biggest" name="cellSize" value="huge"> <label for="biggest">Huge</label>
+            <input type="radio" class="cellSize" name="cellSize" value="2"> <label for="smallest">Tiny</label>
+            <input type="radio" class="cellSize" name="cellSize" value="5"> <label for="small">Small</label>
+            <input type="radio" class="cellSize" name="cellSize" value="10" checked> <label for="regular">Medium</label>
+            <input type="radio" class="cellSize" name="cellSize" value="20"> <label for="big">Large</label>
+            <input type="radio" class="cellSize" name="cellSize" value="50"> <label for="biggest">Huge</label>
         </section>
 
         <section class="frames">
             <h3>FPS</h3>
-            <input type="radio" id="one" name="fps" value=1> <label for="one">1</label>
-            <input type="radio" id="six" name="fps" value=6> <label for="six">6</label>
-            <input type="radio" id="twelve" name="fps" value=12 checked> <label for="twelve">12</label>
-            <input type="radio" id="twentyfour" name="fps" value=24> <label for="twentyfour">24</label>
-            <input type="radio" id="thirty" name="fps" value=30> <label for="thirty">30</label>
-            <input type="radio" id="sixty" name="fps" value=60> <label for="sixty">60</label>
-            <input type="radio" id="oneTwenty" name="fps" value=120> <label for="oneTwenty">120</label>
-            <input type="radio" id="twoFourty" name="fps" value=240> <label for="twoFourty">240</label>
+            <input type="radio" class="fpsRadio" name="fps" value=1> <label for="one">1</label>
+            <input type="radio" class="fpsRadio" name="fps" value=6> <label for="six">6</label>
+            <input type="radio" class="fpsRadio" name="fps" value=12 checked> <label for="twelve">12</label>
+            <input type="radio" class="fpsRadio" name="fps" value=24> <label for="twentyfour">24</label>
+            <input type="radio" class="fpsRadio" name="fps" value=30> <label for="thirty">30</label>
+            <input type="radio" class="fpsRadio" name="fps" value=60> <label for="sixty">60</label>
+            <input type="radio" class="fpsRadio" name="fps" value=120> <label for="oneTwenty">120</label>
+            <input type="radio" class="fpsRadio" name="fps" value=240> <label for="twoFourty">240</label>
         </section>
 
         <section class="colors">
             <h3>Color</h3>
-            <input type="radio" id="red" name="cellColor" value="red" checked> <label for="red">Red</label>
-            <input type="radio" id="blue" name="cellColor" value="blue"> <label for="blue">Blue</label>
-            <input type="radio" id="green" name="cellColor" value="green"> <label for="green">Green</label>
-            <input type="radio" id="yellow" name="cellColor" value="yellow"> <label for="yellow">Yellow</label>
-            <input type="radio" id="white" name="cellColor" value="white"> <label for="white">White</label>
-            <input type="radio" id="purple" name="cellColor" value="purple"> <label for="purple">Purple</label>
-            <input type="radio" id="orange" name="cellColor" value="orange"> <label for="orange">Orange</label>
-            <input type="radio" id="rainbow" name="cellColor" value="rainbow"> <label for="rainbow">Rainbow</label>
+            <input type="radio" class="cellColor" name="cellColor" value="red" checked> <label for="red">Red</label>
+            <input type="radio" class="cellColor" name="cellColor" value="blue"> <label for="blue">Blue</label>
+            <input type="radio" class="cellColor" name="cellColor" value="green"> <label for="green">Green</label>
+            <input type="radio" class="cellColor" name="cellColor" value="yellow"> <label for="yellow">Yellow</label>
+            <input type="radio" class="cellColor" name="cellColor" value="white"> <label for="white">White</label>
+            <input type="radio" class="cellColor" name="cellColor" value="purple"> <label for="purple">Purple</label>
+            <input type="radio" class="cellColor" name="cellColor" value="orange"> <label for="orange">Orange</label>
         </section>
 
         <section class="toggle">
             <h3>Toggles</h3>
             <input type="checkbox" id="grid" value="grid" checked> <label for="grid">Grid Lines</label>
-            <input type="checkbox" id="wrap" value="wrap"> <label for="wrap">Wrapping</label>
+            <input type="checkbox" id="trails" value="trails" checked> <label for="trails">Trails</label>
         </section>
     </div>
 

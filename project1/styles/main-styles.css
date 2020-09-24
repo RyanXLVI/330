@@ -1,26 +1,19 @@
 body{
-    display: grid;
-    grid-template-areas: 
-        'mainHead'    'empty' 'controlHead'
-        'main'        'empty' 'controls' 
-        'description' 'empty' 'controls';
-    row-gap: 10px;
-    column-gap: 10px;
-    padding: 10px;
-}
-
-.description{
-    grid-area: description;
-}
-
-h1{
-    grid-area: mainHead;
+    position: fixed;
+    left: 50px;
+    background-color: gray;
 }
 
 canvas{
- grid-area: main;
+    float: left;
+    border: ridge blue;
 }
 
 .inputs{
-    grid-area: controls;
+    float: left;
+    margin-left: 150px;
+}
+
+.description{
+    display: inline-block;
 }
