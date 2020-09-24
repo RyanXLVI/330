@@ -1,0 +1,26 @@
+body{
+    display: grid;
+    grid-template-areas: 
+        'mainHead'    'empty' 'controlHead'
+        'main'        'empty' 'controls' 
+        'description' 'empty' 'controls';
+    row-gap: 10px;
+    column-gap: 10px;
+    padding: 10px;
+}
+
+.description{
+    grid-area: description;
+}
+
+h1{
+    grid-area: mainHead;
+}
+
+canvas{
+ grid-area: main;
+}
+
+.inputs{
+    grid-area: controls;
+}

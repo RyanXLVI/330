@@ -1,7 +1,7 @@
 "use strict";
 
 let canvas, ctx;
-const canvasWidth = 600, canvasHeight = 400;
+const canvasWidth = 800, canvasHeight = 600;
 const cellWidth = 10;
 const fps = 12;
 let lifeworld;
@@ -13,7 +13,7 @@ function init(){
 	canvas.width = canvasWidth;
 	canvas.height = canvasHeight;
     ctx = canvas.getContext("2d");
-    lifeworld = new lifeWorld(60,40,.2);
+    lifeworld = new lifeWorld(80,60,.2);
 	// TODO: init lifeworld
 	loop();
 }
@@ -44,7 +44,7 @@ function drawWorld(){
 }
 
 function drawCell(col,row,dimensions,alive) {
-    rjsLIB.drawRect(ctx,col*dimensions,row*dimensions,dimensions,dimensions,`${alive ? 'red' : 'rgba(0,0,0,0)'}`);
+    rjsLIB.drawRect(ctx,col*dimensions,row*dimensions,dimensions,dimensions,`${alive ? 'red' : 'rgba(0,0,0,0)'}`,1,`${'rgba(0,0,255,.2)'}`);
     /*ctx.beginPath();
     ctx.rect(col*dimensions,row*dimensions,dimensions,dimensions);
     ctx.fillStyle = alive ? 'red' : 'rgba(0,0,0,0)';
