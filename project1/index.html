@@ -5,13 +5,14 @@
 	<title>Conway's Game of Life</title>
 	<style>
 		body{
-			font-family: sans-serif;
+			font-family: 'Cinzel';
 		}
 		canvas{
 			background-color: #0000AD;
 		}
     </style>
     <link rel="stylesheet" href="styles/main-styles.css">
+    <link href="https://fonts.googleapis.com/css?family=Dosis&display=swap" rel="stylesheet">
 	<script src="src/lifeworld.js"></script>
     <script src="src/index.js"></script>
     <script src="src/rjsLIB.js"></script>
@@ -21,18 +22,6 @@
     <canvas></canvas>
     <div class="inputs">
         <h1 id="controls">Controls</h1>
-
-        <section class="patterns">
-            <select name="patternSelect">
-                <option value="gliderGun">Gosper Glider Gun</option>
-                <option value="beacon1">Beacon on 38P11.1</option>
-                <option value="beacon2">Beacon on cover</option>
-                <option value="ak94">AK-94</option>
-                <option value="b52">B-52 bomber</option>
-                <option value="dieHard">Die hard</option>
-                <option value="random" selected>Random Setup</option>
-            </select>
-        </section>
 
         <section class="buttons">
             <button id="playButton">Play</button> <button id="pauseButton">Pause</button> <button id="stepButton">Step</button>
@@ -81,13 +70,15 @@
             <input type="checkbox" id="grid" value="grid" checked> <label for="grid">Grid Lines</label>
             <input type="checkbox" id="trails" value="trails" checked> <label for="trails">Trails</label>
         </section>
+
+        <p>Click on one of the options above to control how the grid looks and behaves.</p>
     </div>
 
     <section class="description">
         <h2>Description</h2>
         <p>Conway's Game of Life is a simulation in which many squares called cells are placed among a grid and their "lives" are simulated with a set a rules determining if they live, die or 
             even create more life. There are plenty of patterns and starting grids that can provide very interesting results, these can be seen in the "pattern" drop down. 
-        </p>
+        </p>        
     </section>
 </body>
 </html>

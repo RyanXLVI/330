@@ -56,10 +56,16 @@ function setupUI(){
     };
     document.querySelector("#resetButton").onclick = function(){
         resetWorld();
+        if(paused){
+            drawBackground();
+            drawWorld();
+        }
     };
     document.querySelector("#playButton").onclick = function(){
-        paused = false;
-        loop();
+        if(paused == true){
+            paused = false;
+            loop();
+        }
     };
     document.querySelector("#pauseButton").onclick = function(){
         paused = true;
@@ -94,6 +100,8 @@ function drawBackground(){
     if(displayTrails)
         ctx.globalAlpha = 4/fps;
     else
+        ctx.globalAlpha = 1;
+    if(paused)
         ctx.globalAlpha = 1;
 	ctx.fillRect(0,0,canvasWidth,canvasHeight);
 	ctx.restore();

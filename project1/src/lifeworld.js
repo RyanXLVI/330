@@ -1,30 +1,13 @@
 "use strict";
 
 class lifeWorld{
-    constructor(numCols=60,numRows=40,percentAlive=.1,startPattern="random"){
+    constructor(numCols=60,numRows=40,percentAlive=.1){
         this.numCols = numCols;
         this.numRows = numRows;
         this.percentAlive = percentAlive;
         this.world = this.buildArray();
         this.worldBuffer = this.buildArray();
-        this.startPattern = startPattern;
-        if(startPattern == "random")
-            this.randomSetup();
-        else
-            switch(this.startPattern){
-                case "gliderGun":
-                    break;
-                case "beacon1":
-                    break;
-                case "beacon2":
-                    break;
-                case "ak94":
-                    break;
-                case "b52":
-                    break;
-                case "dieHard":
-                    break;
-            }
+        this.randomSetup();
         console.table(this.world);
     }
 
