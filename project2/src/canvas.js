@@ -9,7 +9,7 @@
 
 import * as utils from './utils.js';
 
-let ctx,canvasWidth,canvasHeight,gradient,analyserNode,audioData;
+let ctx,canvasWidth,canvasHeight,gradient,analyserNode,audioData, rot = 0, maxRadius = 200, ang = 0;
 
 
 function setupCanvas(canvasElement,analyserNodeRef){
@@ -18,7 +18,7 @@ function setupCanvas(canvasElement,analyserNodeRef){
 	canvasWidth = canvasElement.width;
 	canvasHeight = canvasElement.height;
 	// create a gradient that runs top to bottom
-	gradient = utils.getLinearGradient(ctx,0,0,0,canvasHeight,[{percent:0,color:"#33ccff"},{percent:1,color:"#ccff33"}]);
+    gradient = utils.getLinearGradient(ctx,0,0,0,canvasHeight,[{percent:0,color:"#33ccff"},{percent:1,color:"#ccff33"}]);
 	// keep a reference to the analyser node
 	analyserNode = analyserNodeRef;
 	// this is the array where the analyser data will be stored
@@ -49,7 +49,7 @@ function draw(params={}){
     }
     // 4 - draw bars
     if(params.showBars){
-        let barSpacing = 4;
+        /*let barSpacing = 4;
         let margin = 5;
         let screenWidthForBars = canvasWidth - (audioData.length * barSpacing) - margin * 2;
         let barWidth = screenWidthForBars / audioData.length;
@@ -63,7 +63,26 @@ function draw(params={}){
             ctx.fillRect(margin + i * (barWidth + barSpacing), topSpacing + 256 - audioData[i],barWidth,barHeight);
             ctx.strokeRect(margin + i * (barWidth + barSpacing), topSpacing + 256 - audioData[i],barWidth,barHeight)
         }
-        ctx.restore();
+        ctx.restore();*/
+        var barWidth = (canvasWidth)/audioData.length;
+        var baseHeight=5;
+        
+        // loop through the data and draw!
+        for(var i=5; i<audioData.length; i++)
+        {   
+            ctx.save();
+            ctx.fillStyle = "#ffedf2";
+
+            /*if(invert){
+                ctx.fillStyle="#ec7696"
+            }*/
+            ctx.translate(canvasWidth/2, canvasHeight/2);
+            ctx.rotate((Math.PI * 2 * (i / (audioData.length-40)))+ (rot -= .00002));
+
+            ctx.beginPath();
+            ctx.fillRect(0,maxRadius,barWidth-2, baseHeight+audioData[i]*.6);
+            ctx.restore();
+        } 
     }
 	
     // 5 - draw circles

@@ -17,7 +17,8 @@ const drawParams = {
     showCircles     : true,
     showNoise       : false,
     showInvert      : false,
-    showEmboss      : false
+    showEmboss      : false,
+    showBackground  : false
 };
 
 // 1 - here we are faking an enumeration
@@ -27,7 +28,11 @@ const DEFAULTS = Object.freeze({
 
 function init(){
 	console.log("init called");
-	console.log(`Testing utils.getRandomColor() import: ${utils.getRandomColor()}`);
+    console.log(`Testing utils.getRandomColor() import: ${utils.getRandomColor()}`);
+    
+    const gui = new dat.GUI({ width: 400 });
+    gui.close();
+
 	let canvasElement = document.querySelector("canvas"); // hookup <canvas> element
     setupUI(canvasElement);
     audio.setupWebaudio(DEFAULTS.sound1);
@@ -45,32 +50,6 @@ function setupUI(canvasElement){
     console.log("init called");
     utils.goFullscreen(canvasElement);
   };
-
-  playButton.onclick = e => {
-      console.log(`audioCtx.state before = ${audio.audioCtx.state}`);
-
-      if(audio.audioCtx.state == "suspended") {
-          audio.audioCtx.resume();
-      }
-      console.log(`audioCtx.state after = ${audio.audioCtx.state}`);
-      if(e.target.dataset.playing == "no"){
-          audio.playCurrentSound();
-          e.target.dataset.playing = "yes";
-      }else{
-          audio.pauseCurrentSound();
-          e.target.dataset.playing = "no";
-      }
-  };
-
-  let volumeSlider = document.querySelector("#volumeSlider");
-  let volumeLabel = document.querySelector("#volumeLabel");
-
-  volumeSlider.oninput = e => {
-      audio.setVolume(e.target.value);
-      volumeLabel.innerHTML = Math.round((e.target.value/2 * 100));
-  };
-
-  volumeSlider.dispatchEvent(new Event("input"));
 
   let trackSelect = document.querySelector("#trackSelect");
 

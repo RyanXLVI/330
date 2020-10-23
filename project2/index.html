@@ -3,16 +3,17 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Audio Visualizer</title>
-	<link href="styles/default-styles.css" type="text/css" rel="stylesheet" />
+    <link href="styles/default-styles.css" type="text/css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js" integrity="sha256-HJ7j+71YYw6Kcs8THwQV9lXmPOcR0eXlg7n8KRTZsyA=" crossorigin="anonymous"></script>
 	<script src="./src/loader.js" type="module"></script>
 </head>
 <body>
 <main>
-	<canvas width="800" height="400"></canvas>
+    <canvas width="1200" height="600"></canvas>
 	<div id="controls">
 		<section>
-			<button id="playButton" data-playing="no"></button>
-			<button id="fsButton">Full Screen</button>
+            <button id="fsButton">Full Screen</button>
+            <audio id="audioControl" controls loop></audio>
 		
 			<label>Track: 
 				<select id="trackSelect">
@@ -23,11 +24,6 @@
 				</select>
 			</label>
 		</section>
-		
-		<section>
-			Volume: <input type="range" id="volumeSlider" min="0" max="2" value="1" step="0.01">
-			<span id="volumeLabel">???</span>
-		</section>
 
 		<section>
 			<span><input type="checkbox" id="gradientCB" checked><label for="gradientCB">Show Gradient</label></span>
@@ -35,9 +31,11 @@
 			<span><input type="checkbox" id="circlesCB" checked><label for="circlesCB">Show Circles</label></span>
 			<span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
 			<span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
-			<span><input type="checkbox" id="embossCB"><label for="embossCB">Show Emboss</label></span>
+            <span><input type="checkbox" id="embossCB"><label for="embossCB">Show Emboss</label></span>
 		  </section>
-	</div>
+    </div>
+    
+    
 </main>
 </body>
 </html>
