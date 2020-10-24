@@ -103,8 +103,15 @@ function draw(params={}){
         for(var i=5; i<audioData2.length; i++)
         {   
             ctx.save();
-            ctx.fillStyle = "#ffedf2";
 
+            if(params.customBarColor){
+                ctx.fillStyle = customControls.barColorSolid;
+            }else if (params.customBarGradient){
+                ctx.fillStyle = utils.getLinearGradient(ctx,0,0,0,canvasHeight,[{percent:0,color:`${customControls.barGradient1}`},{percent:1,color:`${customControls.barGradient2}`}]);
+            }else {
+                ctx.fillStyle = gradient;
+            }
+            
             /*if(invert){
                 ctx.fillStyle="#ec7696"
             }*/
