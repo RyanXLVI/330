@@ -59,8 +59,7 @@ function draw(params={}){
 
     if(params.showCustom){
         ctx.save();
-        gradient = utils.getLinearGradient(ctx,0,0,0,canvasHeight,[{percent:0,color:`${customControls.color1}`},{percent:1,color:`${customControls.color2}`}]);
-        ctx.fillStyle = gradient;
+        ctx.fillStyle = utils.getLinearGradient(ctx,0,0,0,canvasHeight,[{percent:0,color:`${customControls.color1}`},{percent:1,color:`${customControls.color2}`}]);
         ctx.globalAlpha = .3;
         ctx.fillRect(0,0,canvasWidth,canvasHeight);
         ctx.restore();
