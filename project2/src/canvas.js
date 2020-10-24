@@ -9,7 +9,14 @@
 
 import * as utils from './utils.js';
 
-let ctx,canvasWidth,canvasHeight,gradient,analyserNode,audioData, rot = 0, maxRadius = 200, ang = 0;
+let ctx,canvasWidth,canvasHeight,gradient,analyserNode,audioData, rot = 0, maxRadius = 200, audioData2;
+let customControls = {
+    color1          : "#FFFFFF",
+    color2          : "#FFFFFF",
+    barColorSolid   : "#FFFFFF",
+    barGradient1    : "#FFFFFF",
+    barGradient2    : "#FFFFFF"
+};
 
 
 function setupCanvas(canvasElement,analyserNodeRef){
@@ -22,7 +29,8 @@ function setupCanvas(canvasElement,analyserNodeRef){
 	// keep a reference to the analyser node
 	analyserNode = analyserNodeRef;
 	// this is the array where the analyser data will be stored
-	audioData = new Uint8Array(analyserNode.fftSize/2);
+    audioData = new Uint8Array(analyserNode.fftSize/2);
+    audioData2 = new Uint8Array(analyserNode.fftSize/2);
 }
 
 function draw(params={}){
@@ -30,7 +38,7 @@ function draw(params={}){
 	// notice these arrays are passed "by reference" 
 	analyserNode.getByteFrequencyData(audioData);
 	// OR
-	//analyserNode.getByteTimeDomainData(audioData); // waveform data
+	analyserNode.getByteTimeDomainData(audioData2); // waveform data
 	
 	// 2 - draw background
     ctx.save();
@@ -42,6 +50,16 @@ function draw(params={}){
 	// 3 - draw gradient
 	if(params.showGradient){
         ctx.save();
+        gradient = utils.getLinearGradient(ctx,0,0,0,canvasHeight,[{percent:0,color:"#33ccff"},{percent:1,color:"#ccff33"}]);
+        ctx.fillStyle = gradient;
+        ctx.globalAlpha = .3;
+        ctx.fillRect(0,0,canvasWidth,canvasHeight);
+        ctx.restore();
+    }
+
+    if(params.showCustom){
+        ctx.save();
+        gradient = utils.getLinearGradient(ctx,0,0,0,canvasHeight,[{percent:0,color:`${customControls.color1}`},{percent:1,color:`${customControls.color2}`}]);
         ctx.fillStyle = gradient;
         ctx.globalAlpha = .3;
         ctx.fillRect(0,0,canvasWidth,canvasHeight);
@@ -49,29 +67,21 @@ function draw(params={}){
     }
     // 4 - draw bars
     if(params.showBars){
-        /*let barSpacing = 4;
-        let margin = 5;
-        let screenWidthForBars = canvasWidth - (audioData.length * barSpacing) - margin * 2;
-        let barWidth = screenWidthForBars / audioData.length;
-        let barHeight = 200;
-        let topSpacing = 100;
-
-        ctx.save();
-        ctx.fillStyle = 'rgba(255,255,255,0.50)';
-        ctx.strokeStyle = 'rgba(0,0,0,0.50)';
-        for(let i = 0; i < audioData.length; i++){
-            ctx.fillRect(margin + i * (barWidth + barSpacing), topSpacing + 256 - audioData[i],barWidth,barHeight);
-            ctx.strokeRect(margin + i * (barWidth + barSpacing), topSpacing + 256 - audioData[i],barWidth,barHeight)
-        }
-        ctx.restore();*/
-        var barWidth = (canvasWidth)/audioData.length;
-        var baseHeight=5;
+        let barWidth = (canvasWidth)/audioData.length;
+        let baseHeight=5;
         
         // loop through the data and draw!
-        for(var i=5; i<audioData.length; i++)
+        for(let i=0; i<audioData.length; i++)
         {   
             ctx.save();
-            ctx.fillStyle = "#ffedf2";
+
+            if(params.customBarColor){
+                ctx.fillStyle = customControls.barColorSolid;
+            }else if (params.customBarGradient){
+                ctx.fillStyle = utils.getLinearGradient(ctx,0,0,0,canvasHeight,[{percent:0,color:`${customControls.barGradient1}`},{percent:1,color:`${customControls.barGradient2}`}]);
+            }else {
+                ctx.fillStyle = gradient;
+            }
 
             /*if(invert){
                 ctx.fillStyle="#ec7696"
@@ -81,6 +91,28 @@ function draw(params={}){
 
             ctx.beginPath();
             ctx.fillRect(0,maxRadius,barWidth-2, baseHeight+audioData[i]*.6);
+            ctx.restore();
+        } 
+    }
+
+    if(params.showWaveformBars){
+        var barWidth = (canvasWidth)/audioData2.length;
+        var baseHeight=5;
+        
+        // loop through the data and draw!
+        for(var i=5; i<audioData2.length; i++)
+        {   
+            ctx.save();
+            ctx.fillStyle = "#ffedf2";
+
+            /*if(invert){
+                ctx.fillStyle="#ec7696"
+            }*/
+            ctx.translate(canvasWidth/2, canvasHeight/2);
+            ctx.rotate((Math.PI * 2 * (i / (audioData2.length-40)))+ (rot -= .00002));
+
+            ctx.beginPath();
+            ctx.fillRect(0,maxRadius,barWidth-2, baseHeight+audioData2[i]*.6);
             ctx.restore();
         } 
     }
@@ -157,9 +189,23 @@ function draw(params={}){
             data[i] = 127 + 2 * data[i] - data[i+4] - data[i + width * 4];
         }
     }
+
+    if(params.showWaveform){
+        ctx.save();
+		let xStep = canvasWidth/audioData2.length;
+		ctx.lineWidth=5;
+		ctx.beginPath();
+		ctx.moveTo(0,canvasHeight/2);
+		for(let i=0; i<audioData2.length; i++) { 
+			ctx.lineTo(xStep*i,(audioData2[i] *3)-196);
+		}
+		ctx.stroke();
+		ctx.closePath();
+		ctx.restore();
+    }
 	
 	// D) copy image data back to canvas
     ctx.putImageData(imageData, 0, 0);
 }
 
-export {setupCanvas,draw};
+export {setupCanvas,draw, customControls};

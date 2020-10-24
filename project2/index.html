@@ -2,40 +2,21 @@
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
-	<title>Audio Visualizer</title>
+	<title>OP Visualizer</title>
     <link href="styles/default-styles.css" type="text/css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.7.6/dat.gui.min.js" integrity="sha256-HJ7j+71YYw6Kcs8THwQV9lXmPOcR0eXlg7n8KRTZsyA=" crossorigin="anonymous"></script>
 	<script src="./src/loader.js" type="module"></script>
 </head>
 <body>
 <main>
-    <canvas width="1200" height="600"></canvas>
+	<canvas width="1200" height="600"></canvas>
 	<div id="controls">
-		<section>
+		<section>          
             <button id="fsButton">Full Screen</button>
             <audio id="audioControl" controls loop></audio>
-		
-			<label>Track: 
-				<select id="trackSelect">
-					<option value="media/New Adventure Theme.mp3" selected>New Adventure Theme</option>
-					<option value="media/Peanuts Theme.mp3">Peanuts Theme</option>
-					<option value="media/The Picard Song.mp3">The Picard Song</option>
-					<option value="media/Never Gonna Give You Up.mp3">Never Gonna Give You Up</option>
-				</select>
-			</label>
 		</section>
-
-		<section>
-			<span><input type="checkbox" id="gradientCB" checked><label for="gradientCB">Show Gradient</label></span>
-			<span><input type="checkbox" id="barsCB" checked><label for="barsCB">Show Bars</label></span>
-			<span><input type="checkbox" id="circlesCB" checked><label for="circlesCB">Show Circles</label></span>
-			<span><input type="checkbox" id="noiseCB"><label for="noiseCB">Show Noise</label></span>
-			<span><input type="checkbox" id="invertCB"><label for="invertCB">Invert Colors</label></span>
-            <span><input type="checkbox" id="embossCB"><label for="embossCB">Show Emboss</label></span>
-		  </section>
-    </div>
-    
-    
+	</div>
 </main>
+<footer id= "copyright"> &copy; Copyright 2016 Ryan Sousis </h5></footer>
 </body>
 </html>

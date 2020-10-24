@@ -12,14 +12,33 @@ import * as audio from './audio.js';
 import * as canvas from './canvas.js';
 
 const drawParams = {
-    showGradient    : true,
-    showBars        : true,
-    showCircles     : true,
-    showNoise       : false,
-    showInvert      : false,
-    showEmboss      : false,
-    showBackground  : false
+    showGradient        : true,
+    showBars            : true,
+    showCircles         : true,
+    showNoise           : false,
+    showInvert          : false,
+    showEmboss          : false,
+    showCustom          : false,
+    showWaveform        : false,
+    showWaveformBars    : false,
+    customBarColor      : false,
+    customBarGradient   : false
 };
+
+const controllerObject = {
+    _trackSelect    :   "New Adventure Theme",
+
+    set trackSelect(value){
+        this._trackSelect = value;
+        audio.loadSoundFile(`media/${value}.mp3`);
+    },
+
+    get trackSelect(){
+        return this._trackSelect;
+    }
+
+    
+}
 
 // 1 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
@@ -32,6 +51,32 @@ function init(){
     
     const gui = new dat.GUI({ width: 400 });
     gui.close();
+
+    let trackControl = gui.addFolder("Track Selections");
+    trackControl.add(controllerObject, 'trackSelect', ["New Adventure Theme", "Peanuts Theme", "The Picard Song", "Never Gonna Give You Up"]);
+
+    let gradientControls = gui.addFolder("Gradient Controls");
+    gradientControls.add(drawParams, "showGradient");
+    gradientControls.add(drawParams, "showCustom");
+    gradientControls.addColor(canvas.customControls, "color1");
+    gradientControls.addColor(canvas.customControls, "color2");
+
+    let canvasControls = gui.addFolder("Canvas Control");
+    canvasControls.add(drawParams, "showBars");
+    canvasControls.add(drawParams, "showCircles");
+    canvasControls.add(drawParams, "showNoise");
+    canvasControls.add(drawParams, "showInvert");
+    canvasControls.add(drawParams, "showEmboss");
+    canvasControls.add(drawParams, "showWaveformBars");
+    canvasControls.add(drawParams, "showWaveform");
+
+    let barControl = gui.addFolder("Bar Controls");
+    barControl.add(drawParams, "customBarColor");
+    barControl.addColor(canvas.customControls, "barColorSolid");
+    barControl.add(drawParams, "customBarGradient")
+    barControl.addColor(canvas.customControls, "barGradient1");
+    barControl.addColor(canvas.customControls, "barGradient2");
+
 
 	let canvasElement = document.querySelector("canvas"); // hookup <canvas> element
     setupUI(canvasElement);
@@ -50,53 +95,6 @@ function setupUI(canvasElement){
     console.log("init called");
     utils.goFullscreen(canvasElement);
   };
-
-  let trackSelect = document.querySelector("#trackSelect");
-
-  trackSelect.onchange = e => {
-      audio.loadSoundFile(e.target.value);
-
-      if(playButton.dataset.playing = "yes"){
-          playButton.dispatchEvent(new MouseEvent("click"));
-      }
-  };
-
-  let gradientCB = document.querySelector("#gradientCB");
-
-  gradientCB.onchange = e => {
-      drawParams.showGradient = e.target.checked;
-  };
-
-  let barsCB = document.querySelector("#barsCB");
-
-  barsCB.onchange = e => {
-      drawParams.showBars = e.target.checked;
-  };
-
-  let circlesCB = document.querySelector("#circlesCB");
-
-  circlesCB.onchange = e => {
-      drawParams.showCircles = e.target.checked;
-  };
-
-  let noiseCB = document.querySelector("#noiseCB");
-
-  noiseCB.onchange = e => {
-      drawParams.showNoise = e.target.checked;
-  };
-
-  let invertCB = document.querySelector("#invertCB");
-
-  invertCB.onchange = e => {
-      drawParams.showInvert = e.target.checked;
-  };
-
-  let embossCB = document.querySelector("#embossCB");
-
-  embossCB.onchange = e => {
-      drawParams.showEmboss = e.target.checked;
-  };
-
 } // end setupUI
 
 function loop(){

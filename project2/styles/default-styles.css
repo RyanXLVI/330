@@ -15,28 +15,16 @@ canvas {
   margin-left: 1rem;
 }
 
-#volumeLabel{
-  margin-left: 1rem;
-}
-
 section{
   margin-bottom: 1rem;
-}
-
-#playButton{
-  font-size: 1.2rem;
-  width: 6rem;
-}
-
-button[data-playing="yes"]:after{
-  content: "Pause";
-}
-
-button[data-playing="no"]:after{
-  content: "Play";
 }
 
 #fsButton{
   font-size: 1.2rem;
   width: 8rem;
+}
+
+#copyright{
+    color: gray;
+    text-align: center;
 }
