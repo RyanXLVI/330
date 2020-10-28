@@ -86,15 +86,41 @@ function init(){
 }
 
 function setupUI(canvasElement){
-  // A - hookup fullscreen button
-  const fsButton = document.querySelector("#fsButton");
-  const playButton = document.querySelector("#playButton");
+    // A - hookup fullscreen button
+    const fsButton = document.querySelector("#fsButton");
+    const playButton = document.querySelector("#playButton");
 	
-  // add .onclick event to button
-  fsButton.onclick = e => {
-    console.log("init called");
-    utils.goFullscreen(canvasElement);
-  };
+    // add .onclick event to button
+    fsButton.onclick = e => {
+        console.log("init called");
+        utils.goFullscreen(canvasElement);
+    };
+
+    playButton.onclick = e => {
+        console.log(`audioCtx.state before = ${audio.audioCtx.state}`);
+
+        if(audio.audioCtx.state == "suspended"){
+            audio.audioCtx.resume();
+        }
+        console.log(`audioCtx.state after = ${audio.audioCtx.state}`);
+        if(e.target.dataset.playing == "no"){
+            audio.playCurrentSound();
+            e.target.dataset.playing = "yes";
+        }else{
+            audio.pauseCurrentSound();
+            e.target.dataset.playing = "no";
+        }
+    };
+
+    let volumeSlider = document.querySelector("#volumeSlider");
+    let volumeLabel = document.querySelector("#volumeLabel");
+
+    volumeSlider.oninput = e => {
+        audio.setVolume(e.target.value);
+        volumeLabel.innerHTML = Math.round((e.target.value/2*100));
+    };
+
+    volumeSlider.dispatchEvent(new Event("input"));
 } // end setupUI
 
 function loop(){

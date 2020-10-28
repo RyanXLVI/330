@@ -28,3 +28,20 @@ section{
     color: gray;
     text-align: center;
 }
+
+#playButton{
+  font-size: 1.2rem;
+  width: 6rem;
+}
+
+button[data-playing="yes"]:after{
+  content: "Pause";
+}
+
+button[data-playing="no"]:after{
+  content: "Play";
+}
+
+#volumeLabel{
+  margin-left: 1rem;
+}

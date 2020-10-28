@@ -22,13 +22,12 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 audioCtx = new AudioContext();
 
 // 2 - this creates an <audio> element
-element = document.querySelector("#audioControl");
+element = new Audio();
 
 // 3 - have it point at a sound file
 loadSoundFile(filePath);
 
 // 4 - create an a source node that points at the <audio> element
-element.src = filePath;
 sourceNode = audioCtx.createMediaElementSource(element);
 
 // 5 - create an analyser node
@@ -69,4 +68,9 @@ function pauseCurrentSound(){
     element.pause();
 }
 
-export{audioCtx,setupWebaudio,playCurrentSound,pauseCurrentSound,loadSoundFile,analyserNode};
+function setVolume(value){
+    value = Number(value);
+    gainNode.gain.value = value;
+}
+
+export{audioCtx,setupWebaudio,playCurrentSound,pauseCurrentSound,loadSoundFile,setVolume,analyserNode};

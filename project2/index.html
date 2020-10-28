@@ -11,12 +11,17 @@
 <main>
 	<canvas width="1200" height="600"></canvas>
 	<div id="controls">
-		<section>          
+		<section>
+			<button id="playButton" data-playing="no"></button>          
             <button id="fsButton">Full Screen</button>
-            <audio id="audioControl" controls loop></audio>
+		</section>
+
+		<section>
+			Volume: <input type="range" id="volumeSlider" min="0" max="2" value="1" step="0.01">
+			<span id="volumeLabel">???</span>
 		</section>
 	</div>
 </main>
-<footer id= "copyright"> &copy; Copyright 2016 Ryan Sousis </h5></footer>
+<footer id= "copyright"> &copy; Copyright 2020 Ryan Sousis</footer>
 </body>
 </html>
