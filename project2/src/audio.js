@@ -3,7 +3,7 @@ let audioCtx;
 
 // **These are "private" properties - these will NOT be visible outside of this module (i.e. file)**
 // 2 - WebAudio nodes that are part of our WebAudio audio routing graph
-let element, sourceNode, analyserNode, gainNode
+let element, sourceNode, analyserNode, gainNode, highshelfFilter, lowshelfFilter, currentTime = 0, duration = 0;
 
 // 3 - here we are faking an enumeration
 const DEFAULT = Object.freeze({
@@ -50,14 +50,25 @@ analyserNode.fftSize = DEFAULT.numSamples;
 gainNode = audioCtx.createGain();
 gainNode.gain.value = DEFAULT.gain;
 
+highshelfFilter = audioCtx.createBiquadFilter();
+highshelfFilter.type = "highshelf";
+
+lowshelfFilter = audioCtx.createBiquadFilter();
+lowshelfFilter.type = "lowshelf";
+
 // 8 - connect the nodes - we now have an audio graph
 sourceNode.connect(analyserNode);
-analyserNode.connect(gainNode);
+analyserNode.connect(highshelfFilter);
+highshelfFilter.connect(lowshelfFilter);
+lowshelfFilter.connect(gainNode);
 gainNode.connect(audioCtx.destination);
+
 }
 
 function loadSoundFile(filePath){
     element.src = filePath;
+    duration = element.duration;
+    console.log(duration);
 }
 
 function playCurrentSound(){
@@ -73,4 +84,40 @@ function setVolume(value){
     gainNode.gain.value = value;
 }
 
-export{audioCtx,setupWebaudio,playCurrentSound,pauseCurrentSound,loadSoundFile,setVolume,analyserNode};
+function getProgress(){
+    if(!element.currentTime){
+        currentTime=0;
+    } else {
+        currentTime = element.currentTime;
+    }
+
+    return currentTime;
+}
+
+function getPercentage(currentTime, duration){
+    if(!currentTime || !duration){
+        return 0;
+    } else {
+        return currentTime / duration;
+    }
+}
+
+function toggleLowshelf(value, lowshelf = false){
+    if(lowshelf){
+        lowshelfFilter.frequency.setValueAtTime(value, audioCtx.currentTime);
+        lowshelfFilter.gain.setValueAtTime(15, audioCtx.currentTime);
+    } else {
+        lowshelfFilter.gain.setValueAtTime(0, audioCtx.currentTime);
+    }
+}
+
+function toggleHighshelf(value, highshelf = false){
+    if(highshelf){
+        highshelfFilter.frequency.setValueAtTime(value, audioCtx.currentTime);
+        highshelfFilter.gain.setValueAtTime(15, audioCtx.currentTime);
+    } else {
+        highshelfFilter.gain.setValueAtTime(0, audioCtx.currentTime);
+    }
+}
+
+export{audioCtx,setupWebaudio,playCurrentSound,pauseCurrentSound,loadSoundFile,setVolume,toggleHighshelf,toggleLowshelf,getProgress,getPercentage,analyserNode};

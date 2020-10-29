@@ -1,0 +1,27 @@
+This project I had decided to go for more of a customizable approach. One where the user has full control over what they are seeing and how the see this.
+I did this mainly because I have almost no taste in making things aestetically pleasing to others. I believe that what I have done is still up to par with
+what this project requires and I will stand by that thinking. 
+
+A. Overall Quality of Experience:
+    I believe the app not only follows a distinct them of creativity but it also exceeds the idea of that by allowing whoever is using the app to go in and 
+    make whatever Experience they want. I have taking a good approaching to going above and beyond what was done in class and that makes me believe that I have 
+    successfully achieved this requirement. This however doesn't mean I think I deserve the full 50 points as this could have been better and there were more things
+    I would have loved to add. 
+    Grade: 45/50
+
+B. User Experience:
+    This purpose of this app could not be any more obvious, it is a visualizer that allows the user to customize how they want.
+    Grade: 20/20
+
+C. Media:
+    I have thoroughly looked over all of the requirements and as long as my dat.GUI sliders count than I have met all requirements and even passed the validators.
+    Grade: 15/15
+
+D. Code:
+    Everything here was met as intended and the code runs almost seemlessly(one error I was unsure why it showed up)
+    Grade: 14/15
+
+Total Grade:
+    I believe I did a good job on this project and am quite proud with how things turned out. Some things unfortunately didn't work but the things that did
+    I am beyond proud of and fully intend to come back to this in the future.
+    Grade: 84/100 (-10 for missing first prototype)

@@ -9,7 +9,7 @@
 
 import * as utils from './utils.js';
 
-let ctx,canvasWidth,canvasHeight,gradient,analyserNode,audioData, rot = 0, maxRadius = 200, audioData2;
+let ctx,canvasWidth,canvasHeight,gradient,analyserNode,audioData, rot = 0, maxBarRadius = 200, audioData2,averageLoudness = 0, medianLoudness = 0;
 let customControls = {
     color1          : "#FFFFFF",
     color2          : "#FFFFFF",
@@ -31,6 +31,13 @@ function setupCanvas(canvasElement,analyserNodeRef){
 	// this is the array where the analyser data will be stored
     audioData = new Uint8Array(analyserNode.fftSize/2);
     audioData2 = new Uint8Array(analyserNode.fftSize/2);
+    for(let i = 0; i < audioData.length; i++){
+        averageLoudness += audioData[i];
+    }
+    averageLoudness /= audioData.length;
+    averageLoudness /= 255;
+    medianLoudness = audioData[audioData/2];
+    medianLoudness /= audioData.length;
 }
 
 function draw(params={}){
@@ -89,17 +96,17 @@ function draw(params={}){
             ctx.rotate((Math.PI * 2 * (i / (audioData.length-40)))+ (rot -= .00002));
 
             ctx.beginPath();
-            ctx.fillRect(0,maxRadius,barWidth-2, baseHeight+audioData[i]*.6);
+            ctx.fillRect(0,params.barRadius,barWidth-2, baseHeight+audioData[i]*.6);
             ctx.restore();
         } 
     }
 
     if(params.showWaveformBars){
-        var barWidth = (canvasWidth)/audioData2.length;
-        var baseHeight=5;
+        let barWidth = (canvasWidth)/audioData2.length;
+        let baseHeight=5, barSpacing = 4, margin = 5, screenWidth = canvasWidth - (audioData2.length * barSpacing) - margin * 2;
         
         // loop through the data and draw!
-        for(var i=5; i<audioData2.length; i++)
+        for(let i=0; i<audioData2.length; i++)
         {   
             ctx.save();
 
@@ -114,11 +121,9 @@ function draw(params={}){
             /*if(invert){
                 ctx.fillStyle="#ec7696"
             }*/
-            ctx.translate(canvasWidth/2, canvasHeight/2);
-            ctx.rotate((Math.PI * 2 * (i / (audioData2.length-40)))+ (rot -= .00002));
-
             ctx.beginPath();
-            ctx.fillRect(0,maxRadius,barWidth-2, baseHeight+audioData2[i]*.6);
+            ctx.fillRect(margin + i * (barWidth + barSpacing),canvasHeight/2,barWidth-2, baseHeight+audioData2[i] * .6);
+            ctx.fillRect(margin + i * (barWidth + barSpacing),baseHeight+audioData2[i] * .6,barWidth-2, (canvasHeight/2) - baseHeight + audioData2[i] * .6);
             ctx.restore();
         } 
     }
@@ -131,26 +136,134 @@ function draw(params={}){
         for(let i = 0; i < audioData.length; i++){
             let percent = audioData[i] / 255;
 
-            let circleRadius = percent * maxRadius;
+            let circleRadius = percent * params.circleRadius;
             ctx.beginPath();
-            ctx.fillStyle = utils.makeColor(255,111,111,.34 - percent/3.0);
+            ctx.globalAlpha = .34 - percent/3.0;
+            ctx.fillStyle = params.circle1;
             ctx.arc(canvasWidth/2, canvasHeight/2, circleRadius, 0, 2 * Math.PI, false);
             ctx.fill();
             ctx.closePath();
 
             ctx.beginPath();
-            ctx.fillStyle = utils.makeColor(0,0,255,.10-percent/10.0);
+            ctx.globalAlpha = .10-percent/10.0;
+            ctx.fillStyle = params.circle2;
             ctx.arc(canvasWidth/2,canvasHeight/2,circleRadius*1.5,0,2*Math.PI,false);
             ctx.fill();
             ctx.closePath();
 
             ctx.save();
             ctx.beginPath();
-            ctx.fillStyle = utils.makeColor(200,200,0,.5-percent/5.0);
+            ctx.globalAlpha = .5-percent/5.0;
+            ctx.fillStyle = params.circle3;
             ctx.arc(canvasWidth/2,canvasHeight/2,circleRadius*.50,0,2*Math.PI,false)
             ctx.fill();
             ctx.closePath();
             ctx.restore();
+
+            if(params.circleClusters > 1){
+                circleRadius = (percent * params.circleRadius) / 4;
+
+                ctx.beginPath();
+                ctx.globalAlpha = .34 - percent/3.0;
+                ctx.fillStyle = params.circle1;
+                ctx.arc(canvasWidth/8, canvasHeight/4, circleRadius, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.closePath();
+
+                ctx.beginPath();
+                ctx.globalAlpha = .10-percent/10.0;
+                ctx.fillStyle = params.circle2;
+                ctx.arc(canvasWidth/8,canvasHeight/4,circleRadius*1.5,0,2*Math.PI,false);
+                ctx.fill();
+                ctx.closePath();
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.globalAlpha = .5-percent/5.0;
+                ctx.fillStyle = params.circle3;
+                ctx.arc(canvasWidth/8,canvasHeight/4,circleRadius*.50,0,2*Math.PI,false)
+                ctx.fill();
+                ctx.closePath();
+                ctx.restore();
+            }
+            if(params.circleClusters > 2){
+                circleRadius = (percent * params.circleRadius) / 4;
+
+                ctx.beginPath();
+                ctx.globalAlpha = .34 - percent/3.0;
+                ctx.fillStyle = params.circle1;
+                ctx.arc(7 * canvasWidth/8, canvasHeight/4, circleRadius, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.closePath();
+
+                ctx.beginPath();
+                ctx.globalAlpha = .10-percent/10.0;
+                ctx.fillStyle = params.circle2;
+                ctx.arc(7 * canvasWidth/8,canvasHeight/4,circleRadius*1.5,0,2*Math.PI,false);
+                ctx.fill();
+                ctx.closePath();
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.globalAlpha = .5-percent/5.0;
+                ctx.fillStyle = params.circle3;
+                ctx.arc(7 * canvasWidth/8,canvasHeight/4,circleRadius*.50,0,2*Math.PI,false)
+                ctx.fill();
+                ctx.closePath();
+                ctx.restore();
+            }
+            if(params.circleClusters > 3){
+                circleRadius = (percent * params.circleRadius) / 4;
+
+                ctx.beginPath();
+                ctx.globalAlpha = .34 - percent/3.0;
+                ctx.fillStyle = params.circle1;
+                ctx.arc(canvasWidth/8, 3 * canvasHeight/4, circleRadius, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.closePath();
+
+                ctx.beginPath();
+                ctx.globalAlpha = .10-percent/10.0;
+                ctx.fillStyle = params.circle2;
+                ctx.arc(canvasWidth/8,3 * canvasHeight/4,circleRadius*1.5,0,2*Math.PI,false);
+                ctx.fill();
+                ctx.closePath();
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.globalAlpha = .5-percent/5.0;
+                ctx.fillStyle = params.circle3;
+                ctx.arc(canvasWidth/8, 3 * canvasHeight/4,circleRadius*.50,0,2*Math.PI,false)
+                ctx.fill();
+                ctx.closePath();
+                ctx.restore();
+            }
+            if(params.circleClusters > 4){
+                circleRadius = (percent * params.circleRadius) / 4;
+
+                ctx.beginPath();
+                ctx.globalAlpha = .34 - percent/3.0;
+                ctx.fillStyle = params.circle1;
+                ctx.arc(7 * canvasWidth/8, 3 * canvasHeight/4, circleRadius, 0, 2 * Math.PI, false);
+                ctx.fill();
+                ctx.closePath();
+
+                ctx.beginPath();
+                ctx.globalAlpha = .10-percent/10.0;
+                ctx.fillStyle = params.circle2;
+                ctx.arc(7 * canvasWidth/8,3 * canvasHeight/4,circleRadius*1.5,0,2*Math.PI,false);
+                ctx.fill();
+                ctx.closePath();
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.globalAlpha = .5-percent/5.0;
+                ctx.fillStyle = params.circle3;
+                ctx.arc(7 * canvasWidth/8, 3 * canvasHeight/4,circleRadius*.50,0,2*Math.PI,false)
+                ctx.fill();
+                ctx.closePath();
+                ctx.restore();
+            }
         }
         ctx.restore();
     }
@@ -187,6 +300,14 @@ function draw(params={}){
             data[i+1] = 255 - green;
             data[i+2] = 255 - blue;
         }
+
+        let average = (data[i] + data[i+1] + data[i+2])/3;
+        let saturated = params.grayScale * average;
+        let oppositeValue = 1-params.grayScale;
+
+        data[i] = oppositeValue * data[i] + saturated;
+        data[i+1] = oppositeValue * data[i+1] + saturated;
+        data[i+2] = oppositeValue * data[i+2] + saturated;
     } // end for
     
     if(params.showEmboss){
@@ -194,20 +315,6 @@ function draw(params={}){
             if(i%4 == 3) continue;
             data[i] = 127 + 2 * data[i] - data[i+4] - data[i + width * 4];
         }
-    }
-
-    if(params.showWaveform){
-        ctx.save();
-		let xStep = canvasWidth/audioData2.length;
-		ctx.lineWidth=5;
-		ctx.beginPath();
-		ctx.moveTo(0,canvasHeight/2);
-		for(let i=0; i<audioData2.length; i++) { 
-			ctx.lineTo(xStep*i,(audioData2[i] *3)-196);
-		}
-		ctx.stroke();
-		ctx.closePath();
-		ctx.restore();
     }
 	
 	// D) copy image data back to canvas

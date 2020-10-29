@@ -19,10 +19,16 @@ const drawParams = {
     showInvert          : false,
     showEmboss          : false,
     showCustom          : false,
-    showWaveform        : false,
     showWaveformBars    : false,
     customBarColor      : false,
-    customBarGradient   : false
+    customBarGradient   : false,
+    grayScale           : 0,
+    barRadius           : 200,
+    circleClusters      : 1,
+    circleRadius        : 200,
+    circle1             : "#FF6F6F",
+    circle2             : "#0000FF",
+    circle3             : "#C8C800"
 };
 
 const controllerObject = {
@@ -36,14 +42,19 @@ const controllerObject = {
     get trackSelect(){
         return this._trackSelect;
     }
+}
 
-    
+const audioFilters = {
+    trebleAmount    : 0,
+    bassAmount      : 0
 }
 
 // 1 - here we are faking an enumeration
 const DEFAULTS = Object.freeze({
 	sound1  :  "media/New Adventure Theme.mp3"
 });
+
+let currentTime, duration;
 
 function init(){
 	console.log("init called");
@@ -52,8 +63,10 @@ function init(){
     const gui = new dat.GUI({ width: 400 });
     gui.close();
 
-    let trackControl = gui.addFolder("Track Selections");
+    let trackControl = gui.addFolder("Track Control");
     trackControl.add(controllerObject, 'trackSelect', ["New Adventure Theme", "Peanuts Theme", "The Picard Song", "Never Gonna Give You Up"]);
+    trackControl.add(audioFilters, "trebleAmount", 0, 1000);
+    trackControl.add(audioFilters, "bassAmount", 0, 1000);
 
     let gradientControls = gui.addFolder("Gradient Controls");
     gradientControls.add(drawParams, "showGradient");
@@ -68,7 +81,7 @@ function init(){
     canvasControls.add(drawParams, "showInvert");
     canvasControls.add(drawParams, "showEmboss");
     canvasControls.add(drawParams, "showWaveformBars");
-    canvasControls.add(drawParams, "showWaveform");
+    canvasControls.add(drawParams, "grayScale", 0, 1, .01);
 
     let barControl = gui.addFolder("Bar Controls");
     barControl.add(drawParams, "customBarColor");
@@ -76,7 +89,14 @@ function init(){
     barControl.add(drawParams, "customBarGradient")
     barControl.addColor(canvas.customControls, "barGradient1");
     barControl.addColor(canvas.customControls, "barGradient2");
+    barControl.add(drawParams, "barRadius", 150, 450);
 
+    let circleControl = gui.addFolder("Cirlce Controls");
+    circleControl.add(drawParams, "circleClusters", 1, 5, 1);
+    circleControl.add(drawParams, "circleRadius", 50, 450);
+    circleControl.addColor(drawParams, "circle1");
+    circleControl.addColor(drawParams, "circle2");
+    circleControl.addColor(drawParams, "circle3");
 
 	let canvasElement = document.querySelector("canvas"); // hookup <canvas> element
     setupUI(canvasElement);
@@ -121,37 +141,44 @@ function setupUI(canvasElement){
     };
 
     volumeSlider.dispatchEvent(new Event("input"));
+
+    document.querySelector("#upload").onchange = (e) => {
+        const files = e.target.files;
+        audio.loadSoundFile(URL.createObjectURL(files[0]));
+    };
 } // end setupUI
 
 function loop(){
     /* NOTE: This is temporary testing code that we will delete in Part II */
         requestAnimationFrame(loop);
         canvas.draw(drawParams);
-        // 1) create a byte array (values of 0-255) to hold the audio data
-        // normally, we do this once when the program starts up, NOT every frame
-        let audioData = new Uint8Array(audio.analyserNode.fftSize/2);
-        
-        // 2) populate the array of audio data *by reference* (i.e. by its address)
-        //audio.analyserNode.getByteFrequencyData(audioData);
-        
-        /* 3) log out the array and the average loudness (amplitude) of all of the frequency bins
-            console.log(audioData);
-            
-            console.log("-----Audio Stats-----");
-            let totalLoudness =  audioData.reduce((total,num) => total + num);
-            let averageLoudness =  totalLoudness/(audio.analyserNode.fftSize/2);
-            let minLoudness =  Math.min(...audioData); // ooh - the ES6 spread operator is handy!
-            let maxLoudness =  Math.max(...audioData); // ditto!
-            // Now look at loudness in a specific bin
-            // 22050 kHz divided by 128 bins = 172.23 kHz per bin
-            // the 12th element in array represents loudness at 2.067 kHz
-            let loudnessAt2K = audioData[11]; 
-            console.log(`averageLoudness = ${averageLoudness}`);
-            console.log(`minLoudness = ${minLoudness}`);
-            console.log(`maxLoudness = ${maxLoudness}`);
-            console.log(`loudnessAt2K = ${loudnessAt2K}`);
-            console.log("---------------------");
-        */
+
+        let timer = document.querySelector("#time");
+        let totalTime = audio.getProgress();
+        timer.innerHTML = `${Math.floor(totalTime/60)}:${padStart((totalTime % 60).toFixed(0), 2)}`;
+
+        let filters = document.querySelectorAll(".filter");
+
+        for(let i = 0; i < filters.length; i++){
+            if(filters[i].checked){
+                if(filters[i].value == "treble"){
+                    audio.toggleHighshelf(audioFilters.trebleAmount, true);
+                    audio.toggleLowshelf(0,false);
+                } else if(filters[i].value == "bass"){
+                    audio.toggleHighshelf(0, false);
+                    audio.toggleLowshelf(audioFilters.bassAmount,true);
+                } else {
+                    audio.toggleHighshelf(0, false);
+                    audio.toggleLowshelf(0,false);
+                }
+            }
+        }
+    }
+
+    function padStart(number, size){
+        let s = String(number);
+        while(s.length < (size || 2)) {s = '0' + s};
+        return s;
     }
 
 export {init};

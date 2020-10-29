@@ -1,6 +1,8 @@
 body {
-	background: #eeeeee;
-    font-family: tahoma, verdana, sans serif;
+  background-image: url('../media/background.jpg');
+  background-size: cover;
+  font-family: 'Dosis', sans-serif;
+
 }
 
 canvas {
@@ -8,11 +10,47 @@ canvas {
 	margin-top: 1rem;
 	margin-bottom: 1rem;
 	box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
-	background: #fafafa;
+  background: #fafafa;
+  float: left;
+}
+
+h1{
+  text-align: center;
+  color: blueviolet;
+}
+
+h2{
+  text-align: center;
 }
 
 #controls{
-  margin-left: 1rem;
+  background: gray;
+  border-radius: 25px;
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+  float: left;
+  margin-top: 20px;
+  margin-left: 50px;
+  padding-left: 15px;
+}
+
+#inputs{
+  padding-top: 40px;
+}
+
+#sliders{
+  padding-top: 25px
+}
+
+#radios{
+  padding-top: 25px;
+}
+
+#uploadInput{
+  padding-top: 25px;
+}
+
+#rules{
+  padding-top: 25px;
 }
 
 section{
@@ -22,9 +60,11 @@ section{
 #fsButton{
   font-size: 1.2rem;
   width: 8rem;
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
 }
 
 #copyright{
+    float: right;
     color: gray;
     text-align: center;
 }
@@ -32,6 +72,7 @@ section{
 #playButton{
   font-size: 1.2rem;
   width: 6rem;
+  box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
 }
 
 button[data-playing="yes"]:after{
