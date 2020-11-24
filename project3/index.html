@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>What do I play?</title>
+    <link rel="stylesheet" type="text/css" href="css/default-styles.css">
+    <script src="./src/loader.js" type="module"></script>
+</head>
+<body>
+    <header>
+        <h1>What do I Play? - The ultimate boredom solver</h1>
+    </header>
+
+    <main>
+        <div class = "widgets">
+            Search Term -> <input id="searchTerm" type="text" size="50" maxlength="50" autofocus value="Call of Duty"/>
+
+            <button type="button" id="search" class="green">Find the game!</button>
+            <button type="button" id="next" class="green">Display next game!</button>
+        </div>
+        <div id="status">Ready to Search!</div>
+
+        <h2>Results</h2>
+
+        <p id="searchStatus"></p>
+        <div id="content">
+            <br><h2 id="name"></h2>
+            <br><p id="deck"></p>
+            <br><p id="description"></p>
+            <br><p id="date"></p>
+            <br><p id="developers"></p>
+        </div>
+    </main>
+    
+</body>
+</html>
